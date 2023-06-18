@@ -1,9 +1,9 @@
 import { Camera, CameraType } from 'expo-camera'
-import { Box, Text, VStack } from 'native-base'
-import { FC, useState } from 'react'
-import { Button, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Button, Text, View } from 'native-base'
+import { useState } from 'react'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 
-const Palettes: FC = () => {
+export const CameraView = () => {
   const [type, setType] = useState(CameraType.back)
   const [permission, requestPermission] = Camera.useCameraPermissions()
 
@@ -19,7 +19,7 @@ const Palettes: FC = () => {
         <Text style={{ textAlign: 'center' }}>
           We need your permission to show the camera
         </Text>
-        <Button onPress={requestPermission} title='grant permission' />
+        <Button onPress={requestPermission}>Grant permission</Button>
       </View>
     )
   }
@@ -68,5 +68,3 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 })
-
-export default Palettes

@@ -4,6 +4,8 @@ export type StackParamsList = {
   Home: undefined
   Palettes: undefined
   Settings: undefined
+  Camera: undefined
+  ImagePicker: undefined
 }
 
 export interface NavButton {
