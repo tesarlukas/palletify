@@ -13,6 +13,7 @@
     "@types/react": "~18.0.27",
     "eslint-plugin-react": "^7.32.2",
     "expo": "^48.0.19",
+    "expo-camera": "~13.2.1",
     "expo-status-bar": "~1.4.4",
     "firebase": "^9.22.2",
     "native-base": "^3.4.28",
