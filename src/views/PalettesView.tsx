@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native'
-import { Button, Icon, ScrollView, View, VStack } from 'native-base'
+import { Button, Icon, ScrollView, View } from 'native-base'
 import { FC } from 'react'
 import { NavigationHookType } from '../components/navigation/types'
 import { AntDesign } from '@expo/vector-icons'
 import { FIREBASE_APP } from '../../firebaseConfig'
 import { getStorage, ref } from 'firebase/storage'
+import { CameraWrapper } from '../components/camera/CameraWrapper'
 
 export const PalettesView: FC = () => {
   const navigation = useNavigation<NavigationHookType>()
@@ -22,7 +23,7 @@ export const PalettesView: FC = () => {
           bottom={5}
           rounded='full'
           position='absolute'
-          onPress={() => navigation.navigate('ImagePicker')}
+          onPress={() => navigation.navigate('Camera')}
         >
           <Icon as={AntDesign} name='plus' color='white' size={12} />
         </Button>

@@ -1,7 +1,5 @@
-import { Text } from "native-base"
+import { Text } from 'native-base'
 
 export const SettingsView = () => {
-  return (
-    <Text>Settings</Text>
-  )
+  return <Text>Settings</Text>
 }
