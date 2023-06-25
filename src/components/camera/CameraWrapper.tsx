@@ -1,16 +1,27 @@
 import { Camera } from 'expo-camera'
 import { Button, Text, View } from 'native-base'
+import { FC } from 'react'
 import { Modal, StyleSheet, TouchableOpacity } from 'react-native'
 import { useCameraWrapper } from './hooks'
 
-export const CameraWrapper = () => {
+interface CameraWrapper {
+  setImage: React.Dispatch<React.SetStateAction<string>>
+  isCameraVisible: boolean
+  setIsCameraVisible: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const CameraWrapper: FC<CameraWrapper> = ({
+  setImage,
+  isCameraVisible,
+  setIsCameraVisible,
+}) => {
   const {
     permission,
     requestPermission,
     type,
     toggleCameraType,
-    isModalVisible,
-    setIsModalVisible,
+    cameraRef,
+    takePicture,
   } = useCameraWrapper()
 
   if (!permission) {
@@ -30,18 +41,27 @@ export const CameraWrapper = () => {
     )
   }
 
+  const handleTakePicture = async () => {
+    const picture = await takePicture()
+    if (picture) setImage(picture)
+    setIsCameraVisible(false)
+  }
+
   return (
     <View style={styles.container}>
       <Modal
         animationType='slide'
         transparent={true}
-        visible={isModalVisible}
-        onRequestClose={() => setIsModalVisible(!isModalVisible)}
+        visible={isCameraVisible}
+        onRequestClose={() => setIsCameraVisible(!isCameraVisible)}
       >
-        <Camera style={styles.camera} type={type}>
+        <Camera ratio='16:9' style={styles.camera} type={type} ref={cameraRef}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
               <Text style={styles.text}>Flip Camera</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleTakePicture}>
+              <Text style={styles.text}>Take a picture</Text>
             </TouchableOpacity>
           </View>
         </Camera>

@@ -19,15 +19,6 @@ export const PalettesView: FC = () => {
       <View flex={1}>
         <ScrollView></ScrollView>
         <Button
-          right={5}
-          bottom={5}
-          rounded='full'
-          position='absolute'
-          onPress={() => navigation.navigate('Camera')}
-        >
-          <Icon as={AntDesign} name='plus' color='white' size={12} />
-        </Button>
-        <Button
           right={20}
           bottom={5}
           backgroundColor='success.500'

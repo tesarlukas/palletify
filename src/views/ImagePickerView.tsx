@@ -1,13 +1,17 @@
 import React, { useRef, useState } from 'react'
-import { Button, Image, View } from 'react-native'
+import { Image, View } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { FIREBASE_APP } from '../../firebaseConfig'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
-import { ImagePickerAsset, ImagePickerResult } from 'expo-image-picker'
+import { ImagePickerResult } from 'expo-image-picker'
+import { CameraWrapper } from '../components/camera/CameraWrapper'
+import { Button, Icon } from 'native-base'
+import { AntDesign } from '@expo/vector-icons'
 
 export default function ImagePickerView() {
   const [image, setImage] = useState<string>('')
   const result = useRef<ImagePickerResult | undefined>()
+  const [isCameraVisible, setIsCameraVisible] = useState(false)
   const storage = getStorage(FIREBASE_APP)
   const storageRef = ref(storage)
 
@@ -55,7 +59,6 @@ export default function ImagePickerView() {
       xhr.open('GET', uri, true)
       xhr.send(null)
     })
-    console.log(blob)
 
     const fileRef = ref(storageRef, (Math.random() * 1000).toString())
     const result = await uploadBytes(fileRef, blob)
@@ -69,11 +72,25 @@ export default function ImagePickerView() {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title='Pick an image from camera roll' onPress={pickImage} />
+      <Button onPress={pickImage}>Pick an image from camera roll</Button>
       {image && (
         <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
       )}
-      <Button title='Upload image' onPress={handleImageUpload} />
+      <Button onPress={handleImageUpload}>Upload image</Button>
+      <CameraWrapper
+        setImage={setImage}
+        isCameraVisible={isCameraVisible}
+        setIsCameraVisible={setIsCameraVisible}
+      />
+      <Button
+        right={5}
+        bottom={5}
+        rounded='full'
+        position='absolute'
+        onPress={() => setIsCameraVisible(true)}
+      >
+        <Icon as={AntDesign} name='plus' color='white' size={12} />
+      </Button>
     </View>
   )
 }
