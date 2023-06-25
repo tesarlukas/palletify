@@ -1,12 +1,10 @@
 import { useNavigation } from '@react-navigation/native'
 import {
   Button,
-  Center,
   Flex,
   Icon,
   Image,
   ScrollView,
-  Text,
   View,
 } from 'native-base'
 import { FC, useEffect, useState } from 'react'

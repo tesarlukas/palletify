@@ -5,6 +5,7 @@ export type StackParamsList = {
   Palettes: undefined
   Settings: undefined
   ImagePicker: undefined
+  Auth: undefined
 }
 
 export interface NavButton {
