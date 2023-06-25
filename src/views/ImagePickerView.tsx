@@ -3,11 +3,11 @@ import { Button, Image, View } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { FIREBASE_APP } from '../../firebaseConfig'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
-import { ImagePickerAsset } from 'expo-image-picker'
+import { ImagePickerAsset, ImagePickerResult } from 'expo-image-picker'
 
 export default function ImagePickerView() {
   const [image, setImage] = useState<string>('')
-  const result = useRef<any>(null)
+  const result = useRef<ImagePickerResult | undefined>()
   const storage = getStorage(FIREBASE_APP)
   const storageRef = ref(storage)
 
@@ -21,11 +21,9 @@ export default function ImagePickerView() {
       })
 
       if (!res.canceled) {
-        result.current = res.assets
+        result.current = res
         setImage(res.assets[0].uri)
       }
-
-      console.log(`Image state: ${image}`)
     } catch (e) {
       console.error(`Error: ${e}`)
     }
@@ -35,7 +33,7 @@ export default function ImagePickerView() {
     console.log(`${result}`)
 
     try {
-      if (!result.current.cancelled) {
+      if (!result.current?.canceled) {
         await uploadImageAsync(image)
       }
     } catch (e) {
@@ -43,7 +41,7 @@ export default function ImagePickerView() {
     }
   }
 
-  async function uploadImageAsync(uri: string) {
+  const uploadImageAsync = async (uri: string) => {
     const blob: any = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
       xhr.onload = function () {
@@ -57,6 +55,7 @@ export default function ImagePickerView() {
       xhr.open('GET', uri, true)
       xhr.send(null)
     })
+    console.log(blob)
 
     const fileRef = ref(storageRef, (Math.random() * 1000).toString())
     const result = await uploadBytes(fileRef, blob)
