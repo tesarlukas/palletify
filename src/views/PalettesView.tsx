@@ -1,27 +1,74 @@
 import { useNavigation } from '@react-navigation/native'
-import { Button, Icon, ScrollView, View } from 'native-base'
-import { FC } from 'react'
+import {
+  Button,
+  Center,
+  Flex,
+  Icon,
+  Image,
+  ScrollView,
+  Text,
+  View,
+} from 'native-base'
+import { FC, useEffect, useState } from 'react'
 import { NavigationHookType } from '../components/navigation/types'
 import { AntDesign } from '@expo/vector-icons'
 import { FIREBASE_APP } from '../../firebaseConfig'
-import { getStorage, ref } from 'firebase/storage'
-import { CameraWrapper } from '../components/camera/CameraWrapper'
+import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage'
 
 export const PalettesView: FC = () => {
   const navigation = useNavigation<NavigationHookType>()
   const storage = getStorage(FIREBASE_APP)
-  const storageRef = ref(storage)
-  const imageRef = ref(storage, 'images/imagetest1')
-  console.log(imageRef.fullPath)
+  const listRef = ref(storage)
+  const [images, setImages] = useState<string[]>([])
+
+  useEffect(() => {
+    const fetchNames = async (): Promise<string[]> => {
+      const imageNames: string[] = []
+
+      try {
+        const res = await listAll(listRef)
+        res.items.forEach((itemRef) => {
+          imageNames.push(itemRef.name)
+        })
+      } catch (error) {
+        console.error(error)
+      }
+
+      return imageNames
+    }
+
+    const fetchFiles = async () => {
+      try {
+        const imageNames: string[] = await fetchNames()
+        const imageUrls: string[] = await Promise.all(
+          imageNames.map(async (name) => {
+            return await getDownloadURL(ref(storage, name))
+          })
+        )
+
+        setImages(imageUrls)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchFiles()
+  }, [])
 
   return (
     <>
       <View flex={1}>
-        <ScrollView></ScrollView>
+        <ScrollView position='relative'>
+          <Flex direction='row' wrap='wrap'>
+            {images.map((path, i) => (
+              <Image key={i} size='xl' src={path} alt='image is missing' />
+            ))}
+          </Flex>
+        </ScrollView>
         <Button
-          right={20}
+          right={5}
           bottom={5}
-          backgroundColor='success.500'
+          backgroundColor='primary.600'
           rounded='full'
           position='absolute'
           onPress={() => navigation.navigate('ImagePicker')}
