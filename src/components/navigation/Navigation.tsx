@@ -7,7 +7,6 @@ import HomeView from '../../views/HomeView'
 import { PalettesView } from '../../views/PalettesView'
 import { SettingsView } from '../../views/SettingsView'
 import { StackParamsList } from './types'
-import { CameraView } from '../../views/CameraView'
 import ImagePickerView from '../../views/ImagePickerView'
 
 const Stack = createNativeStackNavigator<StackParamsList>()
@@ -21,7 +20,6 @@ export const Navigation: FC = () => {
           <Stack.Screen name='Home' component={HomeView} />
           <Stack.Screen name='Palettes' component={PalettesView} />
           <Stack.Screen name='Settings' component={SettingsView} />
-          <Stack.Screen name='Camera' component={CameraView} />
           <Stack.Screen name='ImagePicker' component={ImagePickerView} />
         </Stack.Navigator>
         <NavigationBar />
