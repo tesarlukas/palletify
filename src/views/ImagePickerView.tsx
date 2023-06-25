@@ -1,47 +1,49 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button, Image, View } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { FIREBASE_APP } from '../../firebaseConfig'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
+import { ImagePickerAsset } from 'expo-image-picker'
 
 export default function ImagePickerView() {
   const [image, setImage] = useState<string>('')
-  const [result, setResult] = useState<any>()
-  let uploadUrl: any
+  const result = useRef<any>(null)
   const storage = getStorage(FIREBASE_APP)
   const storageRef = ref(storage)
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    const res = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    })
-    setResult(res)
+    try {
+      const res = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      })
 
-    console.log(`Result state ${result}`)
+      if (!res.canceled) {
+        result.current = res.assets
+        setImage(res.assets[0].uri)
+      }
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri)
+      console.log(`Image state: ${image}`)
+    } catch (e) {
+      console.error(`Error: ${e}`)
     }
-    console.log(`Image state: ${image}`)
   }
 
   const handleImageUpload = async () => {
-    console.log(result)
+    console.log(`${result}`)
+
     try {
-      if (!result.canceled) {
-        uploadUrl = await uploadImageAsync(image)
+      if (!result.current.cancelled) {
+        await uploadImageAsync(image)
       }
     } catch (e) {
       console.log(`upload error:${e}`)
     }
   }
+
   async function uploadImageAsync(uri: string) {
-    // Why are we using XMLHttpRequest? See:
-    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
     const blob: any = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
       xhr.onload = function () {

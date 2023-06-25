@@ -10,8 +10,8 @@ import { CameraWrapper } from '../components/camera/CameraWrapper'
 export const PalettesView: FC = () => {
   const navigation = useNavigation<NavigationHookType>()
   const storage = getStorage(FIREBASE_APP)
-  const storageRef = ref(storage);
-  const imageRef = ref(storage, 'images/imagetest1');
+  const storageRef = ref(storage)
+  const imageRef = ref(storage, 'images/imagetest1')
   console.log(imageRef.fullPath)
 
   return (
@@ -24,6 +24,16 @@ export const PalettesView: FC = () => {
           rounded='full'
           position='absolute'
           onPress={() => navigation.navigate('Camera')}
+        >
+          <Icon as={AntDesign} name='plus' color='white' size={12} />
+        </Button>
+        <Button
+          right={20}
+          bottom={5}
+          backgroundColor='success.500'
+          rounded='full'
+          position='absolute'
+          onPress={() => navigation.navigate('ImagePicker')}
         >
           <Icon as={AntDesign} name='plus' color='white' size={12} />
         </Button>
