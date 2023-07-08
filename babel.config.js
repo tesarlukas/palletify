@@ -1,5 +1,5 @@
-module.exports = function(api) {
-  api.cache(true);
+module.exports = function (api) {
+  api.cache(true)
   return {
     presets: ['babel-preset-expo'],
     plugins: [
@@ -7,7 +7,7 @@ module.exports = function(api) {
         'module-resolver',
         {
           alias: {
-            "@": './',
+            '@': './',
             assets: './assets',
             components: './src/components',
             modules: './src/modules',
@@ -16,7 +16,8 @@ module.exports = function(api) {
             constants: './src/constants',
           },
         },
-      ]
-    ]
-  };
-};
+      ],
+      ['jotai/babel/plugin-react-refresh'],
+    ],
+  }
+}

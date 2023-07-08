@@ -8,15 +8,37 @@ import {
   Pressable,
   Icon,
 } from 'native-base'
-import { useRef, useState } from 'react'
+import { FC, useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
+import { addDoc, collection } from 'firebase/firestore'
+import { FIRESTORE_DB } from '../../../firebaseConfig'
 
-export const Register = () => {
+export const Register: FC<{
+  setIsRegistered: React.Dispatch<React.SetStateAction<boolean>>
+}> = ({ setIsRegistered }) => {
   const { registerUser } = useRegister()
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [username, setUsername] = useState<string>('')
   const [showPass, setShowPass] = useState<boolean>(false)
+
+  const addUserDetails = async (userId: string) => {
+    try {
+      const docRef = await addDoc(collection(FIRESTORE_DB, 'users'), {
+        email: email,
+        username: username,
+        userId: userId,
+      })
+    } catch (e) {
+      console.error('Error adding document: ', e)
+    }
+  }
+
+  const handleRegister = async () => {
+    const registeredUser = await registerUser(email, password)
+    if (registeredUser) addUserDetails(registeredUser.uid)
+    setIsRegistered(true)
+  }
 
   return (
     <FormControl>
@@ -70,9 +92,7 @@ export const Register = () => {
           </Stack>
           <Center>
             <Stack width='75%'>
-              <Button onPress={() => registerUser(email, password, username)}>
-                Register
-              </Button>
+              <Button onPress={handleRegister}>Register</Button>
             </Stack>
           </Center>
         </Stack>

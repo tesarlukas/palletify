@@ -1,12 +1,15 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { Button, VStack } from 'native-base'
+import { Button, Text, VStack } from 'native-base'
 import { StackParamsList } from '../components/navigation/types'
 import { collection, addDoc } from 'firebase/firestore'
 import { FIRESTORE_DB } from '../../firebaseConfig'
+import {userAtom} from '../App'
+import { atom, useAtom } from 'jotai'
 
 export type HomeProps = NativeStackScreenProps<StackParamsList, 'Home'>
 
 const HomeView = () => {
+  const [user, setUser] = useAtom(userAtom)
   const handleAddDoc = async () => {
     try {
       const docRef = await addDoc(collection(FIRESTORE_DB, 'users'), {
@@ -23,6 +26,7 @@ const HomeView = () => {
   return (
     <VStack flex={1} bg='#fff' alignItems='center' justifyContent='flex-start'>
       <Button onPress={handleAddDoc}>Press</Button>
+      <Text>{user.username}</Text>
     </VStack>
   )
 }

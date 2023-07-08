@@ -20,7 +20,7 @@ export const AuthView = () => {
           </>
         ) : (
           <>
-            <Register />
+            <Register setIsRegistered={setIsRegistered}/>
             <Text>
               Already registered?{' '}
               <Text color='primary.500' onPress={() => setIsRegistered(true)}>

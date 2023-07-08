@@ -5,7 +5,6 @@ export const useRegister = () => {
   const registerUser = async (
     email: string,
     password: string,
-    username: string
   ) => {
     try {
       const userCredetinals = await createUserWithEmailAndPassword(
@@ -14,7 +13,7 @@ export const useRegister = () => {
         password
       )
       const user = userCredetinals.user
-      console.log(user)
+      return user
     } catch (error) {
       console.error(error)
     }
