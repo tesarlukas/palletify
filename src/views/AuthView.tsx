@@ -1,4 +1,4 @@
-import { Center, Text, View } from 'native-base'
+import { Center, StatusBar, Text, View } from 'native-base'
 import { useState } from 'react'
 import { Login, Register } from '../components/auth'
 
@@ -7,6 +7,7 @@ export const AuthView = () => {
 
   return (
     <View flex={1}>
+      <StatusBar backgroundColor={'#222'} />
       <Center>
         {isRegistered ? (
           <>

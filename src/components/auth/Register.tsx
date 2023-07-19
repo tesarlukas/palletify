@@ -7,6 +7,8 @@ import {
   Center,
   Pressable,
   Icon,
+  VStack,
+  useToast,
 } from 'native-base'
 import { FC, useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -21,6 +23,8 @@ export const Register: FC<{
   const [password, setPassword] = useState<string>('')
   const [username, setUsername] = useState<string>('')
   const [showPass, setShowPass] = useState<boolean>(false)
+
+  const toast = useToast()
 
   const addUserDetails = async (userId: string) => {
     try {
@@ -37,13 +41,20 @@ export const Register: FC<{
   const handleRegister = async () => {
     const registeredUser = await registerUser(email, password)
     if (registeredUser) addUserDetails(registeredUser.uid)
+
     setIsRegistered(true)
+    toast.show({
+      description: 'User successfully registered',
+      bgColor: 'success.600',
+      duration: 2000,
+      placement: 'top',
+    })
   }
 
   return (
     <FormControl>
       <Center>
-        <Stack space={5} p={2} width='90%'>
+        <VStack space={5} p={2} width='90%'>
           <Stack>
             <FormControl.Label>Email</FormControl.Label>
             <Input
@@ -95,7 +106,7 @@ export const Register: FC<{
               <Button onPress={handleRegister}>Register</Button>
             </Stack>
           </Center>
-        </Stack>
+        </VStack>
       </Center>
     </FormControl>
   )

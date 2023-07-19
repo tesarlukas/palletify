@@ -14,7 +14,7 @@ export const ImagePicker = () => {
     setImage,
     handleImageUpload,
     pickImage,
-    isUploading,
+    isUploading
   } = useImagePicker()
 
   const theme = useTheme()

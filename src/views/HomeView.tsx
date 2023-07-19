@@ -10,7 +10,7 @@ const HomeView = () => {
   const [user, setUser] = useAtom(userAtom)
 
   return (
-    <VStack flex={1} bg='#fff' alignItems='center' justifyContent='flex-start'>
+    <VStack flex={1} alignItems='center' justifyContent='flex-start'>
       <Text>{user.username}</Text>
     </VStack>
   )

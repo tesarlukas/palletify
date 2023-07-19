@@ -3,9 +3,9 @@ import * as ImagePicker from 'expo-image-picker'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { ImagePickerResult } from 'expo-image-picker'
 import { FIREBASE_APP } from '../../../../firebaseConfig'
-import { useToast } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 import { NavigationHookType } from '../../navigation'
+import { useToast } from 'native-base'
 
 export const useImagePicker = () => {
   const [image, setImage] = useState<string>('')
