@@ -18,10 +18,6 @@ export const useNavigationBar = () => {
       icon: <AntDesign name='setting' size={24} color='white' />,
       onClick: () => navigation.navigate('Settings'),
     },
-    {
-      icon: <AntDesign name='user' size={24} color='white' />,
-      onClick: () => navigation.navigate('Auth'),
-    },
   ]
 
   return {

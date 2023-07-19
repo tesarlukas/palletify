@@ -8,7 +8,6 @@ import { PalettesView } from '../../views/PalettesView'
 import { SettingsView } from '../../views/SettingsView'
 import { StackParamsList } from './types'
 import ImagePickerView from '../../views/ImagePickerView'
-import { AuthView } from '../../views/AuthView'
 
 const Stack = createNativeStackNavigator<StackParamsList>()
 
@@ -22,7 +21,6 @@ export const Navigation: FC = () => {
           <Stack.Screen name='Palettes' component={PalettesView} />
           <Stack.Screen name='Settings' component={SettingsView} />
           <Stack.Screen name='ImagePicker' component={ImagePickerView} />
-          <Stack.Screen name='Auth' component={AuthView} />
         </Stack.Navigator>
         <NavigationBar />
       </NativeBaseProvider>
