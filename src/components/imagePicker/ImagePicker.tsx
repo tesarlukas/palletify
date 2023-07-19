@@ -1,7 +1,7 @@
 import React from 'react'
-import { View } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
-import { Box, Button, HStack, Icon, Image, Text } from 'native-base'
+import { Box, Button, HStack, Icon, Image, Text, useTheme } from 'native-base'
 import { useImagePicker } from './hooks'
 import { CameraWrapper } from '../camera/CameraWrapper'
 import { Entypo } from '@expo/vector-icons'
@@ -14,7 +14,11 @@ export const ImagePicker = () => {
     setImage,
     handleImageUpload,
     pickImage,
+    isUploading,
   } = useImagePicker()
+
+  const theme = useTheme()
+  const loaderColor = theme.colors.primary[400]
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -25,9 +29,26 @@ export const ImagePicker = () => {
             width='100%'
             height='100%'
             alt='Failed to load an image'
+            blurRadius={isUploading ? 5 : 0}
+
           />
         ) : (
           <Text m='auto'>Pick an image or take a photo</Text>
+        )}
+        {isUploading && (
+          <ActivityIndicator
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            color={loaderColor}
+            size='large'
+          />
         )}
       </Box>
       <HStack mt={4}>

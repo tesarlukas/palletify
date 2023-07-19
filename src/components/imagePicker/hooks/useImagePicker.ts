@@ -7,6 +7,7 @@ import { FIREBASE_APP } from '../../../../firebaseConfig'
 export const useImagePicker = () => {
   const [image, setImage] = useState<string>('')
   const [isCameraVisible, setIsCameraVisible] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const result = useRef<ImagePickerResult | undefined>()
   const storage = getStorage(FIREBASE_APP)
   const storageRef = ref(storage)
@@ -52,11 +53,13 @@ export const useImagePicker = () => {
   }
 
   const handleImageUpload = async () => {
-    console.log(`${result}`)
+    // console.log(`${result}`)
+    setIsUploading(true)
 
     try {
       if (!result.current?.canceled) {
         await uploadImageAsync(image)
+        setIsUploading(false)
       }
     } catch (e) {
       console.log(`upload error:${e}`)
@@ -69,6 +72,7 @@ export const useImagePicker = () => {
     image,
     setImage,
     handleImageUpload,
-    pickImage
+    pickImage,
+    isUploading
   }
 }
