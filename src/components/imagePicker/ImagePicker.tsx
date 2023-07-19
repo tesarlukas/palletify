@@ -1,9 +1,10 @@
 import React from 'react'
-import { Image, View } from 'react-native'
+import { View } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
-import { Button, Icon } from 'native-base'
+import { Box, Button, HStack, Icon, Image, Text } from 'native-base'
 import { useImagePicker } from './hooks'
 import { CameraWrapper } from '../camera/CameraWrapper'
+import { Entypo } from '@expo/vector-icons'
 
 export const ImagePicker = () => {
   const {
@@ -17,25 +18,36 @@ export const ImagePicker = () => {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button onPress={pickImage}>Pick an image from camera roll</Button>
-      {image && (
-        <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-      )}
-      <Button onPress={handleImageUpload}>Upload image</Button>
+      <Box style={{ width: '100%', height: 400 }} backgroundColor='gray.200'>
+        {image ? (
+          <Image
+            source={{ uri: image }}
+            width='100%'
+            height='100%'
+            alt='Failed to load an image'
+          />
+        ) : (
+          <Text m='auto'>Pick an image or take a photo</Text>
+        )}
+      </Box>
+      <HStack mt={4}>
+        <Button onPress={pickImage} rounded='2xl' mx={2}>
+          <Icon as={Entypo} name='folder-images' color='white' size={12} />
+        </Button>
+        <Button onPress={() => setIsCameraVisible(true)} rounded='2xl' mx={2}>
+          <Icon as={AntDesign} name='camera' color='white' size={12} />
+        </Button>
+        {image && (
+          <Button onPress={handleImageUpload} rounded='2xl' mx={2}>
+            <Icon as={AntDesign} name='upload' color='white' size={12} />
+          </Button>
+        )}
+      </HStack>
       <CameraWrapper
         setImage={setImage}
         isCameraVisible={isCameraVisible}
         setIsCameraVisible={setIsCameraVisible}
       />
-      <Button
-        right={5}
-        bottom={5}
-        rounded='full'
-        position='absolute'
-        onPress={() => setIsCameraVisible(true)}
-      >
-        <Icon as={AntDesign} name='plus' color='white' size={12} />
-      </Button>
     </View>
   )
 }
