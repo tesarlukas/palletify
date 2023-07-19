@@ -1,8 +1,9 @@
 import { Camera } from 'expo-camera'
-import { Button, Text, View } from 'native-base'
+import { Button, HStack, Icon, Text, View } from 'native-base'
 import { FC } from 'react'
-import { Modal, StyleSheet, TouchableOpacity } from 'react-native'
+import { Modal, StyleSheet } from 'react-native'
 import { useCameraWrapper } from './hooks'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 interface CameraWrapper {
   setImage: React.Dispatch<React.SetStateAction<string>>
@@ -56,14 +57,33 @@ export const CameraWrapper: FC<CameraWrapper> = ({
         onRequestClose={() => setIsCameraVisible(!isCameraVisible)}
       >
         <Camera ratio='16:9' style={styles.camera} type={type} ref={cameraRef}>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-              <Text style={styles.text}>Flip Camera</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handleTakePicture}>
-              <Text style={styles.text}>Take a picture</Text>
-            </TouchableOpacity>
-          </View>
+          <HStack
+            position='absolute'
+            flex={1}
+            bottom={12}
+            width='100%'
+            justifyContent='center'
+          >
+            <Button
+              alignSelf='flex-end'
+              backgroundColor='gray.300'
+              rounded='full'
+              onPress={toggleCameraType}
+              mx={2}
+            >
+              <Icon as={MaterialCommunityIcons} name='camera-flip' size={12} />
+            </Button>
+            <Button
+              alignSelf='flex-end'
+              backgroundColor='gray.300'
+              _pressed={{ backgroundColor: 'gray.100' }}
+              rounded='full'
+              onPress={handleTakePicture}
+              mx={2}
+            >
+              <Icon as={MaterialCommunityIcons} name='camera-iris' size={12} />
+            </Button>
+          </HStack>
         </Camera>
       </Modal>
     </View>
@@ -81,21 +101,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
-  },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
-  },
-  button: {
-    flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
   },
 })
