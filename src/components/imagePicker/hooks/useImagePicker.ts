@@ -6,6 +6,8 @@ import { FIREBASE_APP } from '../../../../firebaseConfig'
 import { useNavigation } from '@react-navigation/native'
 import { NavigationHookType } from '../../navigation'
 import { useToast } from 'native-base'
+import { v4 as uuidv4 } from 'uuid';
+import 'react-native-get-random-values';
 
 export const useImagePicker = () => {
   const [image, setImage] = useState<string>('')
@@ -65,7 +67,7 @@ export const useImagePicker = () => {
       xhr.send(null)
     })
 
-    const fileRef = ref(storageRef, (Math.random() * 1000).toString())
+    const fileRef = ref(storageRef, uuidv4())
     const result = await uploadBytes(fileRef, blob)
     // console.log(result)
 
