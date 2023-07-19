@@ -3,14 +3,34 @@ import * as ImagePicker from 'expo-image-picker'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { ImagePickerResult } from 'expo-image-picker'
 import { FIREBASE_APP } from '../../../../firebaseConfig'
+import { useToast } from 'native-base'
+import { useNavigation } from '@react-navigation/native'
+import { NavigationHookType } from '../../navigation'
 
 export const useImagePicker = () => {
   const [image, setImage] = useState<string>('')
   const [isCameraVisible, setIsCameraVisible] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+
   const result = useRef<ImagePickerResult | undefined>()
   const storage = getStorage(FIREBASE_APP)
   const storageRef = ref(storage)
+
+  const toast = useToast()
+  const navigation = useNavigation<NavigationHookType>()
+
+  const handleAfterUpload = () => {
+    setIsUploading(false)
+    toast.show({
+      description: 'Image successfully uploaded',
+      bgColor: 'success.600',
+      duration: 2000,
+      placement: 'top',
+    })
+    setTimeout(() => {
+      navigation.navigate('Palettes')
+    }, 1000)
+  }
 
   const pickImage = async () => {
     try {
@@ -47,7 +67,7 @@ export const useImagePicker = () => {
 
     const fileRef = ref(storageRef, (Math.random() * 1000).toString())
     const result = await uploadBytes(fileRef, blob)
-    console.log(result)
+    // console.log(result)
 
     blob.close()
   }
@@ -59,7 +79,7 @@ export const useImagePicker = () => {
     try {
       if (!result.current?.canceled) {
         await uploadImageAsync(image)
-        setIsUploading(false)
+        handleAfterUpload()
       }
     } catch (e) {
       console.log(`upload error:${e}`)
@@ -73,6 +93,6 @@ export const useImagePicker = () => {
     setImage,
     handleImageUpload,
     pickImage,
-    isUploading
+    isUploading,
   }
 }
