@@ -7,9 +7,9 @@ import { AuthView } from './views/AuthView'
 export default function App() {
   const [user, setUser] = useAtom(userAtom)
 
-  // if (user.userId) {
+  if (user.userId) {
     return <Navigation />
-  // }
+  }
 
   return (
     <NativeBaseProvider>

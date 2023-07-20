@@ -2,24 +2,38 @@ import { useRef, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { ImagePickerResult } from 'expo-image-picker'
-import { FIREBASE_APP } from '../../../../firebaseConfig'
+import { FIREBASE_APP, FIRESTORE_DB } from '../../../../firebaseConfig'
 import { useNavigation } from '@react-navigation/native'
 import { NavigationHookType } from '../../navigation'
 import { useToast } from 'native-base'
-import uuid from 'react-native-uuid';
-
+import uuid from 'react-native-uuid'
+import { addDoc, collection } from 'firebase/firestore'
+import { userAtom } from '../../shared/atoms'
+import { useAtom } from 'jotai'
 
 export const useImagePicker = () => {
+  const [user, setUser] = useAtom(userAtom)
   const [image, setImage] = useState<string>('')
   const [isCameraVisible, setIsCameraVisible] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
 
   const result = useRef<ImagePickerResult | undefined>()
   const storage = getStorage(FIREBASE_APP)
-  const storageRef = ref(storage)
+  const storageRef = ref(storage, `images/${user.userId}`)
 
   const toast = useToast()
   const navigation = useNavigation<NavigationHookType>()
+
+  const addImageTimestamp = async (imageId: string, timestamp: number) => {
+    try {
+      const docRef = await addDoc(collection(FIRESTORE_DB, 'timestamps'), {
+        imageId: imageId,
+        timestamp: timestamp,
+      })
+    } catch (e) {
+      console.error('Error adding document: ', e)
+    }
+  }
 
   const handleAfterUpload = () => {
     setIsUploading(false)
@@ -67,9 +81,12 @@ export const useImagePicker = () => {
       xhr.send(null)
     })
 
-    const fileRef = ref(storageRef, uuid.v4().toString())
+    const id = uuid.v4().toString()
+
+    const fileRef = ref(storageRef, id)
     const result = await uploadBytes(fileRef, blob)
-    // console.log(result)
+
+    await addImageTimestamp(id, Date.now())
 
     blob.close()
   }
