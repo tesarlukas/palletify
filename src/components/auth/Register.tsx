@@ -56,12 +56,14 @@ export const Register: FC<{
       error = 'Password requirements not met'
     }
 
-    toast.show({
-      description: error,
-      bgColor: 'danger.600',
-      duration: 5000,
-      placement: 'top',
-    })
+    if (error.length > 0) {
+      toast.show({
+        description: error,
+        bgColor: 'danger.600',
+        duration: 5000,
+        placement: 'top',
+      })
+    }
   }
 
   const handleRegister = async () => {
@@ -84,7 +86,7 @@ export const Register: FC<{
   }
 
   const checkEmpty = () => {
-    email.length > 0 && password.length && username.length > 0
+    email.length > 0 && password.length > 5 && username.length > 0
       ? setIsEmpty(false)
       : setIsEmpty(true)
   }

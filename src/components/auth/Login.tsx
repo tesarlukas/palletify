@@ -8,7 +8,6 @@ import {
   Pressable,
   Icon,
 } from 'native-base'
-import { useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
 
 export const Login = () => {
@@ -20,8 +19,9 @@ export const Login = () => {
     setEmail,
     setPassword,
     setShowPass,
+    isEmpty
   } = useLogin()
-  const [isDirty, setIsDirty] = useState(false)
+
 
   return (
     <FormControl>
@@ -67,8 +67,8 @@ export const Login = () => {
             <Stack width='75%'>
               <Button
                 onPress={handleLogin}
-                disabled={isDirty}
-                colorScheme={isDirty ? 'gray' : 'primary'}
+                disabled={isEmpty}
+                colorScheme={isEmpty ? 'gray' : 'primary'}
               >
                 Login
               </Button>
