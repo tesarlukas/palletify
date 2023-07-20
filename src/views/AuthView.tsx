@@ -1,4 +1,4 @@
-import { Center, HStack, StatusBar, Text, View } from 'native-base'
+import { Center, HStack, ScrollView, StatusBar, Text, View } from 'native-base'
 import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { Login, Register } from '../components/auth'
@@ -8,7 +8,7 @@ export const AuthView = () => {
   const [isRegistered, setIsRegistered] = useState<boolean>(false)
 
   return (
-    <View flex={1}>
+    <ScrollView flex={1}>
       <StatusBar backgroundColor={'#222'} />
       <Banner />
       <Center>
@@ -34,6 +34,6 @@ export const AuthView = () => {
           </>
         )}
       </Center>
-    </View>
+    </ScrollView>
   )
 }

@@ -9,8 +9,9 @@ import {
   Icon,
   VStack,
   useToast,
+  Text,
 } from 'native-base'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
 import { addDoc, collection } from 'firebase/firestore'
 import { FIRESTORE_DB } from '../../../firebaseConfig'
@@ -23,6 +24,12 @@ export const Register: FC<{
   const [password, setPassword] = useState<string>('')
   const [username, setUsername] = useState<string>('')
   const [showPass, setShowPass] = useState<boolean>(false)
+
+  let error = ''
+  const [isEmpty, setIsEmpty] = useState(true)
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const passwordRegex = /^.{6,}$/
 
   const toast = useToast()
 
@@ -38,18 +45,53 @@ export const Register: FC<{
     }
   }
 
-  const handleRegister = async () => {
-    const registeredUser = await registerUser(email, password)
-    if (registeredUser) addUserDetails(registeredUser.uid)
+  const validateInputs = () => {
+    error = ''
 
-    setIsRegistered(true)
+    if (!emailRegex.test(email)) {
+      error = 'Invalid email address'
+    }
+
+    if (!passwordRegex.test(password)) {
+      error = 'Password requirements not met'
+    }
+
     toast.show({
-      description: 'User successfully registered',
-      bgColor: 'success.600',
-      duration: 2000,
+      description: error,
+      bgColor: 'danger.600',
+      duration: 5000,
       placement: 'top',
     })
   }
+
+  const handleRegister = async () => {
+    try {
+      validateInputs()
+
+      const registeredUser = await registerUser(email, password)
+      if (registeredUser) addUserDetails(registeredUser.uid)
+
+      setIsRegistered(true)
+      toast.show({
+        description: 'User successfully registered',
+        bgColor: 'success.600',
+        duration: 2000,
+        placement: 'top',
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const checkEmpty = () => {
+    email.length > 0 && password.length && username.length > 0
+      ? setIsEmpty(false)
+      : setIsEmpty(true)
+  }
+
+  useEffect(() => {
+    checkEmpty()
+  }, [email, password, username])
 
   return (
     <FormControl>
@@ -90,7 +132,9 @@ export const Register: FC<{
               }
               placeholder='Password'
             />
-            <FormControl.HelperText>Password must be at least 6 characters.</FormControl.HelperText>
+            <FormControl.HelperText>
+              Password must be at least 6 characters.
+            </FormControl.HelperText>
           </Stack>
           <Stack>
             <FormControl.Label>Username</FormControl.Label>
@@ -104,7 +148,13 @@ export const Register: FC<{
           </Stack>
           <Center>
             <Stack width='75%'>
-              <Button onPress={handleRegister}>Register</Button>
+              <Button
+                onPress={handleRegister}
+                disabled={isEmpty}
+                colorScheme={!isEmpty ? 'primary' : 'gray'}
+              >
+                Register
+              </Button>
             </Stack>
           </Center>
         </VStack>

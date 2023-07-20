@@ -6,7 +6,6 @@ export const useRegister = () => {
     email: string,
     password: string,
   ) => {
-    try {
       const userCredetinals = await createUserWithEmailAndPassword(
         FIREBASE_AUTH,
         email,
@@ -14,9 +13,6 @@ export const useRegister = () => {
       )
       const user = userCredetinals.user
       return user
-    } catch (error) {
-      console.error(error)
     }
-  }
   return { registerUser }
 }
