@@ -22,6 +22,12 @@ interface Image {
   path: string
 }
 
+interface Timestamp {
+  imageId: string
+  timestamp: number
+  path: string
+}
+
 export const PalettesView: FC = () => {
   const [imageTimestamps, setImageTimestamps] = useAtom(imageTimestampsAtom)
   const [user, setUser] = useAtom(userAtom)
@@ -84,12 +90,6 @@ export const PalettesView: FC = () => {
       console.error(error)
     }
   }
-
-  // TODO sorting
-  // interface Timestamp {
-  //   imageId: string
-  //   timestamp: number
-  // }
 
   // const fetchTimestamps = async () => {
   //   const res = await getDocs(collection(FIRESTORE_DB, 'timestamps'))

@@ -30,7 +30,7 @@ export const Navigation: FC = () => {
           <Stack.Screen
             name='Settings'
             component={SettingsView}
-            options={{ title: 'Add a new image' }}
+            options={{ title: 'Settings' }}
           />
           <Stack.Screen
             name='ImagePicker'
