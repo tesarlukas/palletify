@@ -19,6 +19,7 @@ export const ImagePicker = () => {
 
   const theme = useTheme()
   const loaderColor = theme.colors.primary[400]
+  const disabledColor = theme.colors.gray[300]
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -58,7 +59,7 @@ export const ImagePicker = () => {
           <Icon as={AntDesign} name='camera' color='white' size={12} />
         </Button>
         {image && (
-          <Button onPress={handleImageUpload} rounded='2xl' mx={2}>
+          <Button onPress={handleImageUpload} disabled={isUploading} style={isUploading ? {backgroundColor: disabledColor} : {}} rounded='2xl' mx={2}>
             <Icon as={AntDesign} name='upload' color='white' size={12} />
           </Button>
         )}
