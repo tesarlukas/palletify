@@ -90,6 +90,7 @@ export const Register: FC<{
               }
               placeholder='Password'
             />
+            <FormControl.HelperText>Password must be at least 6 characters.</FormControl.HelperText>
           </Stack>
           <Stack>
             <FormControl.Label>Username</FormControl.Label>
