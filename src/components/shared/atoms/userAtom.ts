@@ -1,5 +1,5 @@
-import { atom } from 'jotai'
 import { User } from '../types'
+import { atomWithAsyncStorage } from './helperFunctions/atomWithAsync'
 
-export const userAtom = atom<User>({})
+export const userAtom = atomWithAsyncStorage<User>('loggedUser', {})
 

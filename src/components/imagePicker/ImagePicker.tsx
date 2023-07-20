@@ -30,7 +30,6 @@ export const ImagePicker = () => {
             height='100%'
             alt='Failed to load an image'
             blurRadius={isUploading ? 5 : 0}
-
           />
         ) : (
           <Text m='auto'>Pick an image or take a photo</Text>
