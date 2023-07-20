@@ -37,11 +37,12 @@ export const useImagePicker = () => {
     setImageTimestamps(fetchedTimestamps as Timestamp[])
   }
 
-  const addImageTimestamp = async (imageId: string, timestamp: number) => {
+  const addImageTimestamp = async (imageId: string, timestamp: number, path: string) => {
     try {
       const docRef = await addDoc(collection(FIRESTORE_DB, 'timestamps'), {
         imageId: imageId,
         timestamp: timestamp,
+        path: path
       })
     } catch (e) {
       console.error('Error adding document: ', e)
@@ -98,8 +99,9 @@ export const useImagePicker = () => {
 
     const fileRef = ref(storageRef, id)
     const result = await uploadBytes(fileRef, blob)
+    console.log(result)
 
-    await addImageTimestamp(id, Date.now())
+    await addImageTimestamp(id, Date.now(), 'd')
     await fetchAndUpdateTimestamps()
 
     blob.close()
