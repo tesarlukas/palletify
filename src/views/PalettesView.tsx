@@ -8,10 +8,11 @@ import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage'
 import { Modal } from 'react-native'
 import { Image as ImageExpo } from 'expo-image'
 import { useAtom } from 'jotai'
-import { userAtom } from '../components/shared/atoms'
+import { imageTimestampsAtom, userAtom } from '../components/shared/atoms'
 import { addDoc, collection, DocumentData, getDocs } from 'firebase/firestore'
 
 export const PalettesView: FC = () => {
+  const [imageTimestamps, setImageTimestamps] = useAtom(imageTimestampsAtom)
   const [user, setUser] = useAtom(userAtom)
   const [images, setImages] = useState<string[]>([])
   const [selectedImage, setSelectedImage] = useState('')
@@ -76,7 +77,7 @@ export const PalettesView: FC = () => {
     }
 
     fetchFiles()
-  }, [])
+  }, [imageTimestamps])
 
   return (
     <>

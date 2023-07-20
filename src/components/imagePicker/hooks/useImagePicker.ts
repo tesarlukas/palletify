@@ -7,12 +7,14 @@ import { useNavigation } from '@react-navigation/native'
 import { NavigationHookType } from '../../navigation'
 import { useToast } from 'native-base'
 import uuid from 'react-native-uuid'
-import { addDoc, collection } from 'firebase/firestore'
-import { userAtom } from '../../shared/atoms'
+import { imageTimestampsAtom, userAtom } from '../../shared/atoms'
 import { useAtom } from 'jotai'
+import { addDoc, collection, DocumentData, getDocs } from 'firebase/firestore'
+import { Timestamp } from '../../shared/types'
 
 export const useImagePicker = () => {
   const [user, setUser] = useAtom(userAtom)
+  const [imageTimestamps, setImageTimestamps] = useAtom(imageTimestampsAtom)
   const [image, setImage] = useState<string>('')
   const [isCameraVisible, setIsCameraVisible] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -23,6 +25,17 @@ export const useImagePicker = () => {
 
   const toast = useToast()
   const navigation = useNavigation<NavigationHookType>()
+
+  const fetchAndUpdateTimestamps = async () => {
+    const res = await getDocs(collection(FIRESTORE_DB, 'timestamps'))
+    const fetchedTimestamps: DocumentData | Timestamp[] = []
+
+    res.forEach((timestamp) => {
+      fetchedTimestamps.push(timestamp.data())
+    })
+
+    setImageTimestamps(fetchedTimestamps as Timestamp[])
+  }
 
   const addImageTimestamp = async (imageId: string, timestamp: number) => {
     try {
@@ -87,6 +100,7 @@ export const useImagePicker = () => {
     const result = await uploadBytes(fileRef, blob)
 
     await addImageTimestamp(id, Date.now())
+    await fetchAndUpdateTimestamps()
 
     blob.close()
   }
