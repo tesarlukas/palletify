@@ -17,10 +17,26 @@ export const Navigation: FC = () => {
       <NativeBaseProvider>
         <StatusBar backgroundColor={'#222'} />
         <Stack.Navigator initialRouteName='Home'>
-          <Stack.Screen name='Home' component={HomeView} />
-          <Stack.Screen name='Palettes' component={PalettesView} />
-          <Stack.Screen name='Settings' component={SettingsView} />
-          <Stack.Screen name='ImagePicker' component={ImagePickerView} />
+          <Stack.Screen
+            name='Home'
+            component={HomeView}
+            options={{ title: 'Home' }}
+          />
+          <Stack.Screen
+            name='Palettes'
+            component={PalettesView}
+            options={{ title: 'Image gallery' }}
+          />
+          <Stack.Screen
+            name='Settings'
+            component={SettingsView}
+            options={{ title: 'Add a new image' }}
+          />
+          <Stack.Screen
+            name='ImagePicker'
+            component={ImagePickerView}
+            options={{ title: 'Add a new image' }}
+          />
         </Stack.Navigator>
         <NavigationBar />
       </NativeBaseProvider>

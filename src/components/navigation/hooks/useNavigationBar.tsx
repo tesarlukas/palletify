@@ -1,4 +1,4 @@
-import { AntDesign, FontAwesome } from '@expo/vector-icons'
+import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { NavButton, NavigationHookType } from '../types'
 
@@ -11,7 +11,7 @@ export const useNavigationBar = () => {
       onClick: () => navigation.navigate('Home'),
     },
     {
-      icon: <FontAwesome name='paint-brush' size={24} color='white' />,
+      icon: <Ionicons name='image-outline' size={24} color='white' />,
       onClick: () => navigation.navigate('Palettes'),
     },
     {
